@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -528,18 +529,20 @@ Job& Job::operator = (const Job& obj){
 
 istream& Job::citire(istream& in){
     cout << "Numele Job-ului: ";
-    in >> this->numeJob;
+    in.get();
+    getline(in, this->numeJob);
 
     cout << "Salariu: ";
     in >> this->salariuDeBaza;
 
     cout << "Locatia Job-ului:\n";
     cout << " Nume Tara: ";
-    in >> this->locatieJob.numeTara;
+    in.get();
+    getline(in, this->locatieJob.numeTara);
     cout << " Nume Oras: ";
-    in >> this->locatieJob.numeOras;
+    getline(in, this->locatieJob.numeOras);
     cout << " Nume Strada: ";
-    in >> this->locatieJob.numeStrada;
+    getline(in, this->locatieJob.numeStrada);
     cout << " Numarul Strazii: ";
     in >> this->locatieJob.nrStrada;
 
@@ -575,7 +578,11 @@ istream& Job::citire(istream& in){
 ostream& Job::afisare(ostream& out) const {
     out << "Nume Job: " << this->numeJob << "\n";
     out << "Salariu de baza: " << this->salariuDeBaza << "\n";
-    out << "Locatie Job: " << this->locatieJob.numeTara << ", " << this->locatieJob.numeOras << ", Strada " << this->locatieJob.numeStrada << ", Numarul " << this->locatieJob.nrStrada << "\n";
+    out << "Locatie Job:\n";
+    out << "  Tara: " << this->locatieJob.numeTara << "\n";
+    out << "  Oras: " << this->locatieJob.numeOras << "\n";
+    out << "  Strada: " << this->locatieJob.numeStrada << "\n";
+    out << "  Numarul: " << this->locatieJob.nrStrada << "\n";
     out << "Numar minim de ani de experienta: " << this->nrAniExperientaMin << "\n";
     out << "Limbaje de programare necesare: ";
     for(auto it : this->limbajeCerute){
@@ -767,9 +774,9 @@ ostream& FrontEndDev::afisare(ostream& out) const {
 
 void FrontEndDev::modificaAnunt(){
     bool updating = true;
-    cout << "Ce doresti sa modifici?\n";
     while(updating){
         system("CLS");
+        cout << "Ce doresti sa modifici?\n";
         cout << "1 -> Titlul job-ului\n";
         cout << "2 -> Salariul de baza\n";
         cout << "3 -> Locatia Job-ului\n";
@@ -975,9 +982,9 @@ ostream& BackEndDev::afisare(ostream& out) const {
 
 void BackEndDev::modificaAnunt(){
     bool updating = true;
-    cout << "Ce doresti sa modifici?\n";
     while(updating){
         system("CLS");
+        cout << "Ce doresti sa modifici?\n";
         cout << "1 -> Titlul job-ului\n";
         cout << "2 -> Salariul de baza\n";
         cout << "3 -> Locatia Job-ului\n";
@@ -1173,7 +1180,6 @@ istream& FullStackDev::citire(istream& in){
 
     cout << "Experienta in urmatoarele platforme: ";
     string platform;
-    in.get();
     getline(in, platform);
     stringstream f(platform);
     while(getline(f, platform, ' ')){
@@ -1211,9 +1217,9 @@ ostream& FullStackDev::afisare(ostream& out) const {
 
 void FullStackDev::modificaAnunt(){
     bool updating = true;
-    cout << "Ce doresti sa modifici?\n";
     while(updating){
         system("CLS");
+        cout << "Ce doresti sa modifici?\n";
         cout << "1 -> Titlul job-ului\n";
         cout << "2 -> Salariul de baza\n";
         cout << "3 -> Locatia Job-ului\n";
@@ -1423,9 +1429,9 @@ ostream& SoftwareDev::afisare(ostream& out) const {
 
 void SoftwareDev::modificaAnunt(){
     bool updating = true;
-    cout << "Ce doresti sa modifici?\n";
     while(updating){
         system("CLS");
+        cout << "Ce doresti sa modifici?\n";
         cout << "1 -> Titlul job-ului\n";
         cout << "2 -> Salariul de baza\n";
         cout << "3 -> Locatia Job-ului\n";
@@ -1525,88 +1531,6 @@ void SoftwareDev::modificaAnunt(){
 
 
 ///////////////////////////////////////////////////////
-class Angajator : public Client{
-private:
-    string numeCompanie;
-    vector<Job*> anunturi;
-
-public:
-    //------- CONSTRUCTORI -------//
-    Angajator();
-    Angajator(const Angajator& obj);
-
-    //------- OPERATORI -------//
-    Angajator& operator = (const Angajator& obj);
-
-    //------- GETTERS & SETTERS -------//
-    string getNumeCompanie() const {return this->numeCompanie;}
-
-    void setNumeCompanie(string numeCompanie){this->numeCompanie = numeCompanie;}
-
-    //------- METODE -------//
-    void posteazaAnunt();
-    istream& creeazaCont(istream& in);
-    ostream& afisProfilUser(ostream& out) const;
-
-    //------- DESTRUCTOR -------//
-    virtual ~Angajator(){}
-};
-
-Angajator::Angajator() : Client() {this->numeCompanie = "";}
-Angajator::Angajator(const Angajator& obj) : Client(obj) {this->numeCompanie = obj.numeCompanie;}
-Angajator& Angajator::operator = (const Angajator& obj) {
-    if(this != &obj){
-        Client::operator = (obj);
-        this->numeCompanie = obj.numeCompanie;
-    }
-    return *this;
-}
-
-void Angajator::posteazaAnunt(){
-    Job* anunt;
-    cout << "Ce post vizeaza acest anunt? 1 -> Web Developer\n 2 -> Software Developer\n 3 -> Mobile Application Developer\n";
-    cout << "Raspuns: ";
-    int response;
-    cin >> response;
-    switch(response){
-        case 1:{
-            system("CLS");
-            cout << "Alegeti una dintre urmatoarele variante:\n 1 -> Front-End Developer\n 2 -> Back-End Developer\n 3 -> Full-Stack Developer\n";
-            cout << "Raspuns: ";
-            cin >> response;
-            if(response == 1){
-                anunt = new FrontEndDev();
-            }
-            else if(response == 2){
-                anunt = new BackEndDev();
-            }
-            else{
-                anunt = new FullStackDev();
-            }
-            cin >> (*anunt);
-            this->anunturi.push_back(anunt);
-        }
-    }
-}
-
-istream& Angajator::creeazaCont(istream& in){
-    Client::creeazaCont(in);
-    cout << "Numele companiei: ";
-    in >> this->numeCompanie;
-
-    return in;
-}
-
-ostream& Angajator::afisProfilUser(ostream& out) const {
-    Client::afisProfilUser(out);
-    out << "Lucreaza la " << this->numeCompanie << "\n";
-
-    return out;
-}
-///////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////
 class MobileAppDev : public Job {
 protected:
     vector<string> frameworks;
@@ -1684,9 +1608,9 @@ ostream& MobileAppDev::afisare(ostream& out) const {
 
 void MobileAppDev::modificaAnunt(){
     bool updating = true;
-    cout << "Ce doresti sa modifici?\n";
     while(updating){
         system("CLS");
+        cout << "Ce doresti sa modifici?\n";
         cout << "1 -> Titlul job-ului\n";
         cout << "2 -> Salariul de baza\n";
         cout << "3 -> Locatia Job-ului\n";
@@ -1791,9 +1715,351 @@ void MobileAppDev::modificaAnunt(){
 ///////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////
+class Angajator : public Client{
+private:
+    string numeCompanie;
+    vector<Job*> anunturi;
+
+public:
+    //------- CONSTRUCTORI -------//
+    Angajator();
+    Angajator(const Angajator& obj);
+
+    //------- OPERATORI -------//
+    Angajator& operator = (const Angajator& obj);
+
+    //------- GETTERS & SETTERS -------//
+    string getNumeCompanie() const {return this->numeCompanie;}
+    vector<Job*> getAnunturi() const {return this->anunturi;}
+
+    void setNumeCompanie(string numeCompanie){this->numeCompanie = numeCompanie;}
+    void setAnunturi(const vector<Job*>& anunturi){this->anunturi = anunturi;}
+
+    //------- METODE -------//
+    Job* posteazaAnunt();
+    istream& creeazaCont(istream& in);
+    ostream& afisProfilUser(ostream& out) const;
+
+    //------- DESTRUCTOR -------//
+    virtual ~Angajator(){}
+};
+
+Angajator::Angajator() : Client() {this->numeCompanie = "";}
+Angajator::Angajator(const Angajator& obj) : Client(obj) {this->numeCompanie = obj.numeCompanie;}
+Angajator& Angajator::operator = (const Angajator& obj) {
+    if(this != &obj){
+        Client::operator = (obj);
+        this->numeCompanie = obj.numeCompanie;
+    }
+    return *this;
+}
+
+Job* Angajator::posteazaAnunt(){
+    Job* anunt;
+    cout << "Ce post vizeaza acest anunt?\n 1 -> Web Developer\n 2 -> Software Developer\n 3 -> Mobile Application Developer\n";
+    cout << "Raspuns: ";
+    int response;
+    cin >> response;
+    switch(response){
+        case 1:{
+            system("CLS");
+            cout << "Alegeti una dintre urmatoarele variante:\n 1 -> Front-End Developer\n 2 -> Back-End Developer\n 3 -> Full-Stack Developer\n";
+            cout << "Raspuns: ";
+            cin >> response;
+            if(response == 1){
+                anunt = new FrontEndDev();
+            }
+            else if(response == 2){
+                anunt = new BackEndDev();
+            }
+            else{
+                anunt = new FullStackDev();
+            }
+            cin >> (*anunt);
+            this->anunturi.push_back(anunt);
+            break;
+        }
+        case 2:{
+            anunt = new SoftwareDev();
+            cin >> (*anunt);
+            this->anunturi.push_back(anunt);
+            break;
+        }
+        case 3:{
+            anunt = new MobileAppDev();
+            cin >> (*anunt);
+            this->anunturi.push_back(anunt);
+            break;
+        }
+    }
+    system("CLS");
+    cout << (*anunt) << "\n";
+    cout << "\nConfirmati corectitudinea datelor?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+    cin >> response;
+    if(response == 1){
+        cout << "Anunt postat cu succes!\n";
+    }
+    else{
+        (*anunt).modificaAnunt();
+        cout << "Anunt postat cu succes!\n";
+    }
+    return anunt;
+}
+
+istream& Angajator::creeazaCont(istream& in){
+    Client::creeazaCont(in);
+    cout << "Numele companiei: ";
+    in >> this->numeCompanie;
+
+    return in;
+}
+
+ostream& Angajator::afisProfilUser(ostream& out) const {
+    Client::afisProfilUser(out);
+    out << "Lucreaza la: " << this->numeCompanie << "\n";
+
+    return out;
+}
+///////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////
+class Meniu{
+private:
+    vector<Client*> users;
+    vector<Job*> anunturiGlobal;
+    Client* user;
+
+public:
+    void clearScreen(){system("cls");}
+    void welcome();
+    void viewOptions();
+    void showJobs();
+};
+
+void Meniu::welcome(){
+    cout << "Bine ai venit!\n";
+    cout << "Alege o actiune:\n 1 -> Creeaza cont\n 2 -> Autentifica-te\nRaspuns: ";
+    int response;
+    cin >> response;
+    if(response == 1){
+        clearScreen();
+        cout << "Doresc sa:\n 1 -> Angajez\n 2 -> Fiu angajat\nRaspuns: ";
+        cin >> response;
+        if(response == 1){
+            user = new Angajator();
+            (*user).creeazaCont(cin);
+            this->users.push_back(user);
+            viewOptions();
+        }
+        else{
+            user = new Client();
+            (*user).creeazaCont(cin);
+            this->users.push_back(user);
+            viewOptions();
+        }
+    }
+    else{
+        string email, parola;
+        clearScreen();
+        cout << "Email: ";
+        cin >> email;
+        cout << "Parola: ";
+        cin >> parola;
+        bool found = false;
+        for(auto it : this->users){
+            if((*user).getEmail() == email && (*user).getParola() == parola){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            cout << "Date incorecte!\nDoresti sa creezi un cont nou?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+            cin >> response;
+            if(response == 1){
+                clearScreen();
+                cout << "Doresc sa:\n 1 -> Angajez\n 2 -> Fiu angajat\nRaspuns: ";
+                cin >> response;
+                if(response == 1){
+                    user = new Angajator();
+                    (*user).creeazaCont(cin);
+                    this->users.push_back(user);
+                }
+                else{
+                    user = new Client();
+                    (*user).creeazaCont(cin);
+                    this->users.push_back(user);
+                }
+            }
+            else{
+                int nrIncercari = 0;
+                while(true){
+                    nrIncercari++;
+                    clearScreen();
+                    cout << "Incearca inca o data:\n";
+                    cout << "Email: ";
+                    cin >> email;
+                    cout << "Parola: ";
+                    cin >> parola;
+                    found = false;
+                    for(auto it : this->users){
+                        if((*user).getEmail() == email && (*user).getParola() == parola){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(found){
+                        break;
+                    }
+                    if(nrIncercari == 3){
+                        break;
+                    }
+                }
+                if(nrIncercari == 3){
+                    clearScreen();
+                    cout << "Ai atins numarul maxim de incercari! Incearca din nou mai tarziu.";
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+        viewOptions();
+    }
+}
+
+void Meniu::showJobs(){
+    for(int i = 0; i < this->anunturiGlobal.size(); ++i){
+        cout << i + 1 << ". " << (*this->anunturiGlobal[i]) << "\n";
+    }
+}
+
+void Meniu::viewOptions(){
+    while(true){
+        clearScreen();
+        bool angajator = false;
+        cout << "Bine ai revenit, " << (*user).getPrenume() << "\nAlege una dintre urmatoarele actiuni:\n 1 -> Vizualizeaza profilul\n 2 -> Editeaza profilul\n 3 -> Cauta Job\n 4 -> Log Out\n";
+        if(dynamic_cast<Angajator*>(user) != NULL){
+            angajator = true;
+            cout << " 5 -> Posteaza anunt\n 6 -> Modifica anunt\n 7 -> Vezi anunturile tale\n";
+        }
+        cout << "Raspuns: ";
+        int response;
+        cin >> response;
+        if(!angajator){
+            switch(response){
+                case 1:{
+                    cout << (*user) << "\n";
+                    cout << "Doresti sa faci o modificare?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+                    cin >> response;
+                    if(response == 1){
+                        (*user).modificaProfil();
+                    }
+                    break;
+                }
+                case 2:{
+                    (*user).modificaProfil();
+                    break;
+                }
+                case 3:{
+                    showJobs();
+                    cout << "Ati gasit un job interesant?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+                    cin >> response;
+                    if(response == 1){
+                        cout << "Introduceti indicele corespunzator ofertei de job dorite: ";
+                        cin >> response;
+                        if(response < this->anunturiGlobal.size()){
+                            (*this->anunturiGlobal[response - 1]).addJobApplicant(*user);
+                        }
+                        else{
+                            clearScreen();
+                            cout << "Oferta inexistenta!\n";
+                            Sleep(1000);
+                        }
+                    }
+                    break;
+                }
+                case 4:{
+                    clearScreen();
+                    welcome();
+                    break;
+                }
+                default:
+                    cout << "Actiune imposibila!\n";
+            }
+        }
+        else{
+            switch(response){
+                case 1:{
+                    cout << (*user) << "\n";
+                    cout << "Doresti sa faci o modificare?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+                    cin >> response;
+                    if(response == 1){
+                        (*user).modificaProfil();
+                    }
+                    break;
+                }
+                case 2:{
+                    (*user).modificaProfil();
+                    break;
+                }
+                case 3:{
+                    showJobs();
+                    cout << "Ati gasit un job interesant?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
+                    cin >> response;
+                    if(response == 1){
+                        cout << "Introduceti indicele corespunzator ofertei de job dorite: ";
+                        cin >> response;
+                        if(response < this->anunturiGlobal.size()){
+                            (*this->anunturiGlobal[response - 1]).addJobApplicant(*user);
+                        }
+                        else{
+                            clearScreen();
+                            cout << "Oferta inexistenta!\n";
+                            Sleep(1000);
+                        }
+                    }
+                    break;
+                }
+                case 4:{
+                    clearScreen();
+                    welcome();
+                    break;
+                }
+                case 5:{
+                    this->anunturiGlobal.push_back(dynamic_cast<Angajator*>(user)->posteazaAnunt());
+                    break;
+                }
+                case 6:{
+                    Angajator* aux = dynamic_cast<Angajator*>(user);
+                    for(int i = 0; i < aux->getAnunturi().size(); ++i){
+                        cout << i + 1 << " " << (*aux->getAnunturi()[i]) << "\n";
+                    }
+                    cout << "Introduceti indicele anuntului corespunzator: ";
+                    cin >> response;
+                    aux->getAnunturi()[response - 1]->modificaAnunt();
+                    dynamic_cast<Angajator*>(user)->setAnunturi(aux->getAnunturi());
+                    break;
+                }
+                case 7:{
+                    for(auto it : dynamic_cast<Angajator*>(user)->getAnunturi()){
+                        cout << (*it) << "\n";
+                    }
+                    cout << "1 -> Back\n Raspuns: ";
+                    cin >> response;
+                    break;
+                }
+                default:
+                    cout << "Actiune imposibila!\n";
+            }
+        }
+    }
+}
+///////////////////////////////////////////////////////
+
+
 int main(){
-    Client a;
-    cin >> a;
-    a.modificaProfil();
-    cout << a;
+    Meniu M;
+    system("cls");
+    system("Color 03");
+    M.welcome();
 }
