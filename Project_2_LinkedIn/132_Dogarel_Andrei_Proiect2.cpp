@@ -168,7 +168,7 @@ istream& Client::creeazaCont(istream& in){
             bool uppercase = false;
             bool lowercase = false;
             bool digit = false;
-            int minLength = 8;
+            bool minLength = false;
             for(auto ch : this->parola){
                 if(isupper(ch)){
                     uppercase = true;
@@ -306,7 +306,7 @@ void Client::modificaProfil(){
                         bool uppercase = false;
                         bool lowercase = false;
                         bool digit = false;
-                        int minLength = 8;
+                        bool minLength = false;
                         for(auto ch : parola){
                             if(isupper(ch)){
                                 uppercase = true;
@@ -1760,6 +1760,7 @@ public:
     Job* posteazaAnunt();
     istream& creeazaCont(istream& in);
     ostream& afisProfilUser(ostream& out) const;
+    void afisAnunturi();
 
     //------- DESTRUCTOR -------//
     virtual ~Angajator(){}
@@ -1840,6 +1841,12 @@ ostream& Angajator::afisProfilUser(ostream& out) const {
     out << "Lucreaza la: " << this->numeCompanie << "\n";
 
     return out;
+}
+
+void Angajator::afisAnunturi(){
+    for(int i = 0; i < this->anunturi.size(); ++i){
+        cout << i + 1 << ". " << *this->anunturi[i] << "\n";
+    }
 }
 ///////////////////////////////////////////////////////
 
@@ -2003,7 +2010,7 @@ void Meniu::viewOptions(Client* user){
         if(dynamic_cast<Angajator*>(user) != NULL){
             angajator = true;
             setTextColor(4);
-            cout << " 5 -> Posteaza anunt\n 6 -> Modifica anunt\n 7 -> Vezi anunturile tale\n";
+            cout << " 5 -> Posteaza anunt\n 6 -> Modifica anunt\n 7 -> Vezi anunturile tale\n 8 -> Sterge anunt\n";
         }
         setTextColor(10);
         cout << "Raspuns: ";
@@ -2012,6 +2019,7 @@ void Meniu::viewOptions(Client* user){
         if(!angajator){
             switch(response){
                 case 1:{
+                    clearScreen();
                     setTextColor(9);
                     cout << (*user) << "\n";
                     cout << "Doresti sa faci o modificare?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
@@ -2022,11 +2030,13 @@ void Meniu::viewOptions(Client* user){
                     break;
                 }
                 case 2:{
+                    clearScreen();
                     setTextColor(9);
                     (*user).modificaProfil();
                     break;
                 }
                 case 3:{
+                    clearScreen();
                     setTextColor(9);
                     showJobs();
                     break;
@@ -2039,12 +2049,15 @@ void Meniu::viewOptions(Client* user){
                 }
                 default:
                     setTextColor(4);
+                    clearScreen();
                     cout << "Actiune imposibila!\n";
+                    Sleep(2000);
             }
         }
         else{
             switch(response){
                 case 1:{
+                    clearScreen();
                     setTextColor(9);
                     cout << (*user) << "\n";
                     cout << "Doresti sa faci o modificare?\n 1 -> Da\n 2 -> Nu\nRaspuns: ";
@@ -2055,11 +2068,13 @@ void Meniu::viewOptions(Client* user){
                     break;
                 }
                 case 2:{
+                    clearScreen();
                     setTextColor(9);
                     (*user).modificaProfil();
                     break;
                 }
                 case 3:{
+                    clearScreen();
                     setTextColor(9);
                     showJobs();
                     break;
@@ -2071,10 +2086,12 @@ void Meniu::viewOptions(Client* user){
                     break;
                 }
                 case 5:{
+                    clearScreen();
                     this->anunturiGlobal.push_back(dynamic_cast<Angajator*>(user)->posteazaAnunt());
                     break;
                 }
                 case 6:{
+                    clearScreen();
                     setTextColor(9);
                     Angajator* aux = dynamic_cast<Angajator*>(user);
                     for(int i = 0; i < aux->getAnunturi().size(); ++i){
@@ -2095,33 +2112,55 @@ void Meniu::viewOptions(Client* user){
                     break;
                 }
                 case 7:{
+                    clearScreen();
                     setTextColor(9);
-                    for(int i = 0; i < dynamic_cast<Angajator*>(user)->getAnunturi().size(); ++i){
-                        cout << i + 1 << ". " << (*dynamic_cast<Angajator*>(user)->getAnunturi()[i]) << "\n";
+                    if(dynamic_cast<Angajator*>(user)->getAnunturi().size()){
+                        for(int i = 0; i < dynamic_cast<Angajator*>(user)->getAnunturi().size(); ++i){
+                            cout << i + 1 << ". " << (*dynamic_cast<Angajator*>(user)->getAnunturi()[i]) << "\n";
+                        }
+                        cout << " 1 -> Back\n 2 -> Vezi cine a aplicat\nRaspuns: ";
+                        cin >> response;
+                        if(response == 2){
+                            cout << "Introduceti indicele corespunzator anuntului: ";
+                            cin >> response;
+                            if(response <= dynamic_cast<Angajator*>(user)->getAnunturi().size()){
+                                clearScreen();
+                                dynamic_cast<Angajator*>(user)->getAnunturi()[response - 1]->showJobApplicants();
+                                cout << "1 -> Back\nRaspuns: ";
+                                cin >> response;
+                            }
+                            else{
+                                cout << "Acest anunt nu exista!\n";
+                                Sleep(2000);
+                            }
+                        }
                     }
-                    cout << " 1 -> Back\n 2 -> Vezi cine a aplicat\nRaspuns: ";
-                    cin >> response;
-                    if(response == 2){
+                    else{
+                        cout << "Inca nu exista anunturi postate!\n";
+                        Sleep(2000);
+                    }
+                    break;
+                }
+                case 8:{
+                    clearScreen();
+                    if(dynamic_cast<Angajator*>(user)->getAnunturi().size()){
+                        dynamic_cast<Angajator*>(user)->afisAnunturi();
                         cout << "Introduceti indicele corespunzator anuntului: ";
                         cin >> response;
                         if(response <= dynamic_cast<Angajator*>(user)->getAnunturi().size()){
-                            clearScreen();
-                            dynamic_cast<Angajator*>(user)->getAnunturi()[response - 1]->showJobApplicants();
-                            cout << "1 -> Back\nRaspuns: ";
-                            cin >> response;
+                            vector<Job*> anunturi = dynamic_cast<Angajator*>(user)->getAnunturi();
+                            anunturi.erase(anunturi.begin() + response - 1);
+                            dynamic_cast<Angajator*>(user)->setAnunturi(anunturi);
                         }
                         else{
                             cout << "Acest anunt nu exista!\n";
                             Sleep(2000);
                         }
                     }
-                    break;
-                }
-                default:{
-                    setTextColor(4);
-                    cout << "Actiune imposibila!\n";
-                    Sleep(2000);
-                    break;
+                    else{
+                        cout << "Inca nu exista anunturi postate!\n";
+                        Sleep(2000);
+                    }
                 }
             }
         }
