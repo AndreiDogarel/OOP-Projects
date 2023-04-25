@@ -1371,12 +1371,12 @@ void FullStackDev::modificaAnunt(){
 ///////////////////////////////////////////////////////
 class SoftwareDev : public Job{
 private:
-    vector<string> siBACKerare;
+    vector<string> sistemeOperare;
 
 public:
     //------- CONSTRUCTORI -------//
     SoftwareDev();
-    SoftwareDev(string numeJob, int salariuDeBaza, locatie locatieJob, int nrAniExperientaMin, const vector<string>& limbajeCerute, bool easyApply, const vector<Client*>& jobApplicants, int nrLocuriDispon, const vector<string>& siBACKerare);
+    SoftwareDev(string numeJob, int salariuDeBaza, locatie locatieJob, int nrAniExperientaMin, const vector<string>& limbajeCerute, bool easyApply, const vector<Client*>& jobApplicants, int nrLocuriDispon, const vector<string>& sistemeOperare);
     SoftwareDev(const SoftwareDev& obj);
 
     //------- OPERATORI -------//
@@ -1387,9 +1387,9 @@ public:
     ostream& afisare(ostream& out) const;
 
     //------- GETTERS & SETTERS -------//
-    vector<string> getSiBACKerare() const {return this->siBACKerare;}
+    vector<string> getsistemeOperare() const {return this->sistemeOperare;}
 
-    void setSiBACKerare(const vector<string>& siBACKerare){this->siBACKerare = siBACKerare;}
+    void setsistemeOperare(const vector<string>& sistemeOperare){this->sistemeOperare = sistemeOperare;}
 
     //------- METODE -------//
     void modificaAnunt();
@@ -1399,22 +1399,22 @@ public:
 };
 
 SoftwareDev::SoftwareDev() : Job() {
-    this->siBACKerare = {};
+    this->sistemeOperare = {};
 }
 
-SoftwareDev::SoftwareDev(string numeJob, int salariuDeBaza, locatie locatieJob, int nrAniExperientaMin, const vector<string>& limbajeCerute, bool easyApply, const vector<Client*>& jobApplicants, int nrLocuriDispon, const vector<string>& siBACKerare) : 
+SoftwareDev::SoftwareDev(string numeJob, int salariuDeBaza, locatie locatieJob, int nrAniExperientaMin, const vector<string>& limbajeCerute, bool easyApply, const vector<Client*>& jobApplicants, int nrLocuriDispon, const vector<string>& sistemeOperare) : 
     Job(numeJob, salariuDeBaza, locatieJob, nrAniExperientaMin, limbajeCerute, easyApply, jobApplicants, nrLocuriDispon){
-        this->siBACKerare = {};
+        this->sistemeOperare = {};
     }
 
 SoftwareDev::SoftwareDev(const SoftwareDev& obj) : Job(obj){
-    this->siBACKerare = obj.siBACKerare;
+    this->sistemeOperare = obj.sistemeOperare;
 }
 
 SoftwareDev& SoftwareDev::operator = (const SoftwareDev& obj){
     if(this != &obj){
         Job::operator = (obj);
-        this->siBACKerare = obj.siBACKerare;
+        this->sistemeOperare = obj.sistemeOperare;
     }
     return *this;
 }
@@ -1427,7 +1427,7 @@ istream& SoftwareDev::citire(istream& in){
     getline(in, update);
     stringstream f(update);
     while(getline(f, update, ' ')){
-        this->siBACKerare.push_back(update);
+        this->sistemeOperare.push_back(update);
     }
 
     return in;
@@ -1436,7 +1436,7 @@ istream& SoftwareDev::citire(istream& in){
 ostream& SoftwareDev::afisare(ostream& out) const {
     Job::afisare(out);
     out << "Cunostinte in urmatoarele sisteme de operare: ";
-    for(auto it : this->siBACKerare){
+    for(auto it : this->sistemeOperare){
         out << it << " ";
     }
     out << "\n";
@@ -1522,14 +1522,14 @@ void SoftwareDev::modificaAnunt(){
                 break;
             }
             case 7:{
-                this->siBACKerare.clear();
+                this->sistemeOperare.clear();
                 cout << "Introduceti sistemele de operare necesare: ";
                 string update;
                 cin.get();
                 getline(cin, update);
                 stringstream s(update);
                 while(getline(s, update, ' ')){
-                    this->siBACKerare.push_back(update);
+                    this->sistemeOperare.push_back(update);
                 }
                 break;
             }
@@ -2047,11 +2047,6 @@ void Meniu::viewOptions(Client* user){
                     welcome();
                     break;
                 }
-                default:
-                    setTextColor(4);
-                    clearScreen();
-                    cout << "Actiune imposibila!\n";
-                    Sleep(2000);
             }
         }
         else{
