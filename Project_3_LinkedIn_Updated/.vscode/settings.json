@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "system_error": "cpp",
+        "typeindex": "cpp",
+        "iostream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
